@@ -1,10 +1,9 @@
 from collections.abc import Callable
+from typing import Any
 
 from .descriptor import ToolDescriptor
 from .schema import generate_json_schema
 
-
-from typing import Any
 
 def tool(
     name: str | None = None,

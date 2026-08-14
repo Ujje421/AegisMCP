@@ -32,6 +32,7 @@ class AegisMCP:
         self.workflow_engine = WorkflowEngine()
 
         from aegismcp.execution.pipeline import Middleware
+
         self.middlewares: list[Middleware] = []
         if telemetry_metrics and telemetry_tracer:
             from aegismcp.execution.middleware.observability import ObservabilityMiddleware
