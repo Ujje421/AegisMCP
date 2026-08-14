@@ -63,7 +63,7 @@ class RedisRateLimiter:
         self.redis = redis_client
         self.tokens_per_minute = float(tokens_per_minute)
         self.key_prefix = key_prefix
-        self._script_sha = None
+        self._script_sha: str | None = None
 
     async def _load_script(self) -> str:
         if self._script_sha is None:
@@ -82,14 +82,14 @@ class RedisRateLimiter:
 
         # Execute Lua script atomically
         try:
-            result = await self.redis.evalsha(  # type: ignore
+            result = await self.redis.evalsha(
                 sha, 1, bucket_key, self.tokens_per_minute, now
             )
         except NoScriptError:
             # Script was flushed from Redis, reload and try again
             self._script_sha = None
             sha = await self._load_script()
-            result = await self.redis.evalsha(  # type: ignore
+            result = await self.redis.evalsha(
                 sha, 1, bucket_key, self.tokens_per_minute, now
             )
 
