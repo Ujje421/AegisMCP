@@ -64,7 +64,7 @@ class ModelProvider(Protocol):
         ctx: AegisContext,
     ) -> ModelResponse: ...
 
-    async def stream(
+    def stream(
         self,
         messages: list[Message],
         tools: list[ToolDescriptor],
