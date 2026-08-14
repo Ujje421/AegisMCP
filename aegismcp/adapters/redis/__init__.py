@@ -1,0 +1,1 @@
+# aegismcp.adapters.redis namespace

@@ -1,0 +1,1 @@
+# aegismcp.adapters.starlette namespace
