@@ -1,6 +1,8 @@
 import pytest
-from aegismcp.protocol.lifecycle import SessionLifecycle, SessionState, StateTransitionEvent
+
 from aegismcp.kernel.events import EventBus
+from aegismcp.protocol.lifecycle import SessionLifecycle, SessionState, StateTransitionEvent
+
 
 @pytest.mark.asyncio
 async def test_lifecycle():

@@ -17,3 +17,11 @@ def test_tool_decorator():
     assert "x" in schema["properties"]
     assert "x" in schema["required"]
     assert "y" not in schema["required"]
+
+def test_schema_untyped():
+    from aegismcp.tools.schema import generate_json_schema
+    def untyped_func(x):
+        return x
+        
+    schema = generate_json_schema(untyped_func)
+    assert schema["properties"]["x"]["type"] == "string"

@@ -1,5 +1,7 @@
 import pytest
+
 from aegismcp.server.app import AegisMCP
+
 
 @pytest.mark.asyncio
 async def test_app_tool_registration():

@@ -51,9 +51,9 @@ async def test_tool_executor_timeout():
 
 @pytest.mark.asyncio
 async def test_pipeline():
-    async def middleware(inputs, ctx, desc, next_handler):
+    async def middleware(inputs, ctx, descriptor, next_handler):
         inputs["added"] = True
-        return await next_handler(inputs, ctx, desc)
+        return await next_handler(inputs, ctx, descriptor)
         
     executor = ToolExecutor()
     pipeline = ExecutionPipeline([middleware], executor)
@@ -72,3 +72,20 @@ async def test_pipeline():
     
     result = await pipeline.execute({}, ctx, descriptor)
     assert result is True
+
+@pytest.mark.asyncio
+async def test_executor_deadline_exceeded():
+    executor = ToolExecutor()
+    descriptor = ToolDescriptor(
+        name="my_tool", description="", input_schema={}, output_schema=None,
+        timeout_seconds=5.0, max_retries=0, retry_delay_seconds=0, is_idempotent=False,
+        required_permissions=frozenset(), audit_level="NONE", fn=lambda: 1
+    )
+    
+    from datetime import datetime, timedelta, UTC
+    now = datetime.now(UTC)
+    # Deadline is in the past
+    ctx = create_anonymous_context("r1", "t1", "s1", now - timedelta(seconds=10))
+    
+    with pytest.raises(ToolTimeoutError):
+        await executor({}, ctx, descriptor)

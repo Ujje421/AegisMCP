@@ -35,3 +35,18 @@ def test_decode_notification():
     msg = codec.decode('{"jsonrpc": "2.0", "method": "test_notify"}')
     assert isinstance(msg, JSONRPCNotification)
     assert msg.method == "test_notify"
+
+def test_decode_invalid_type():
+    codec = ProtocolCodec()
+    with pytest.raises(InvalidMessageError):
+        codec.decode('["array", "instead", "of", "object"]')
+
+def test_decode_invalid_request():
+    codec = ProtocolCodec()
+    msg = codec.decode('{"jsonrpc": "2.0", "id": 1}') # missing method, parsed as response
+    assert isinstance(msg, JSONRPCResponse)
+
+def test_decode_missing_method_and_id():
+    codec = ProtocolCodec()
+    with pytest.raises(InvalidMessageError):
+        codec.decode('{"jsonrpc": "2.0"}')

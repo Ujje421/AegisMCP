@@ -35,7 +35,7 @@ class ToolExecutor:
                     loop.run_in_executor(None, lambda: descriptor.fn(**kwargs)), 
                     timeout=timeout
                 )
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise ToolTimeoutError(
                 f"Tool {descriptor.name} timed out after {timeout}s",
                 ctx.request_id

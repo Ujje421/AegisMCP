@@ -1,9 +1,12 @@
+import sys
+
 import pytest
-from aegismcp.transports.stdio import StdioTransport
+
+from aegismcp.kernel.errors import ConnectionError
 from aegismcp.protocol.codec import ProtocolCodec
 from aegismcp.protocol.messages import JSONRPCRequest
-from aegismcp.kernel.errors import ConnectionError
-import sys
+from aegismcp.transports.stdio import StdioTransport
+
 
 @pytest.mark.asyncio
 async def test_stdio_transport(monkeypatch):
