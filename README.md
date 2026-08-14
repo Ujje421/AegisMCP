@@ -17,7 +17,7 @@ If FastMCP is Flask, AegisMCP is Django. It provides a robust kernel, integrated
 ## Installation
 
 ```bash
-pip install aegis-mcp
+pip install aegismcp-core
 ```
 
 Or install with all optional extensions (HTTP transports, observability SDKs, vector database adapters):
