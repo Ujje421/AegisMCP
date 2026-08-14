@@ -57,15 +57,18 @@ class RedisRateLimiter:
     return tokens
     """
 
-    def __init__(self, redis_client: redis.Redis, tokens_per_minute: int = 60, key_prefix: str = "ratelimit"):
+    def __init__(
+        self, redis_client: redis.Redis, tokens_per_minute: int = 60, key_prefix: str = "ratelimit"
+    ):
         self.redis = redis_client
         self.tokens_per_minute = float(tokens_per_minute)
         self.key_prefix = key_prefix
         self._script_sha = None
 
-    async def _load_script(self):
+    async def _load_script(self) -> str:
         if self._script_sha is None:
             self._script_sha = await self.redis.script_load(self.LUA_SCRIPT)
+        assert self._script_sha is not None
         return self._script_sha
 
     async def __call__(

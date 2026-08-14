@@ -1,5 +1,6 @@
 import asyncio
 from typing import Any
+from collections.abc import AsyncGenerator
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -39,7 +40,7 @@ class ServerSseTransport(Transport):
     async def stop(self) -> None:
         pass
 
-    async def receive(self):
+    async def receive(self) -> AsyncGenerator[Any, None]:
         while True:
             raw_msg = await self._queue.get()
             try:
@@ -47,7 +48,7 @@ class ServerSseTransport(Transport):
             except Exception as e:
                 print(f"DEBUG: Transport decode failed: {e}")
 
-    async def send(self, message) -> None:
+    async def send(self, message: Any) -> None:
         encoded = self._codec.encode(message)
         await self.outbound_queue.put(encoded)
 
@@ -57,27 +58,28 @@ class ServerSseTransport(Transport):
 
 from contextlib import asynccontextmanager
 
+
 def create_starlette_app(aegis_app: AegisMCP) -> Starlette:
     """
     Creates a Starlette ASGI application that mounts the given AegisMCP instance.
     """
     transport = ServerSseTransport()
-    
+
     @asynccontextmanager
-    async def lifespan(app: Starlette):
+    async def lifespan(app: Starlette) -> AsyncGenerator[None, None]:
         task = asyncio.create_task(aegis_app.run_transport(transport))
         yield
         task.cancel()
 
-    async def sse_endpoint(request: Request):
-        async def event_generator():
+    async def sse_endpoint(request: Request) -> Response:
+        async def event_generator() -> AsyncGenerator[bytes, None]:
             while True:
                 msg = await transport.outbound_queue.get()
                 yield f"data: {msg}\n\n".encode("utf-8")
-        
+
         return EventSourceResponse(event_generator())
 
-    async def message_endpoint(request: Request):
+    async def message_endpoint(request: Request) -> Response:
         body = await request.body()
         await transport.push_incoming(body.decode("utf-8"))
         return Response(status_code=202)

@@ -94,9 +94,7 @@ class AegisMCP:
                     # Basic mock implementation to unblock transport tests
                     # A real router would parse the method, find the tool, run the pipeline, etc.
                     response = JSONRPCResponse(
-                        jsonrpc="2.0",
-                        id=message.id,
-                        result={"success": True}
+                        jsonrpc="2.0", id=message.id, result={"success": True}
                     )
                     await transport.send(response)
         finally:

@@ -71,7 +71,7 @@ def context():
         permissions=frozenset(),
         deadline=datetime.now(timezone.utc),
         metadata={},
-        baggage={}
+        baggage={},
     )
 
 
@@ -88,14 +88,14 @@ def descriptor():
         is_idempotent=True,
         required_permissions=frozenset(),
         audit_level="none",
-        fn=lambda: None
+        fn=lambda: None,
     )
 
 
 @pytest.mark.asyncio
 async def test_redis_ratelimiter_allows_request(mock_redis, context, descriptor):
     limiter = RedisRateLimiter(redis_client=mock_redis, tokens_per_minute=5)
-    
+
     # Should allow 5 requests
     for _ in range(5):
         result = await limiter({}, context, descriptor, mock_next_handler)
@@ -109,13 +109,13 @@ async def test_redis_ratelimiter_allows_request(mock_redis, context, descriptor)
 @pytest.mark.asyncio
 async def test_redis_ratelimiter_script_reload(mock_redis, context, descriptor):
     limiter = RedisRateLimiter(redis_client=mock_redis, tokens_per_minute=5)
-    
+
     result = await limiter({}, context, descriptor, mock_next_handler)
     assert result == "success"
-    
+
     # Simulate Redis being flushed (script disappears)
     mock_redis.scripts.clear()
-    
+
     # The limiter should automatically catch NoScriptError, reload it, and succeed
     result2 = await limiter({}, context, descriptor, mock_next_handler)
     assert result2 == "success"
