@@ -1,18 +1,19 @@
 from aegismcp.kernel.errors import (
-    AegisError, 
+    AegisError,
+    ConfigurationError,
+    ConnectionError,
     InvalidMessageError,
+    ResourceNotFoundError,
+    SchemaValidationError,
+    SecurityError,
+    SerializationError,
+    ToolNotFoundError,
+    ToolRetryExhaustedError,
     ToolTimeoutError,
     UnsupportedCapabilityError,
     VersionMismatchError,
-    ToolNotFoundError,
-    ToolRetryExhaustedError,
-    ResourceNotFoundError,
-    ConnectionError,
-    SerializationError,
-    ConfigurationError,
-    SchemaValidationError,
-    SecurityError
 )
+
 
 def test_error_formatting():
     err = AegisError("Something went wrong", request_id="req-123")
