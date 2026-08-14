@@ -1,9 +1,12 @@
+import asyncio
+
 import pytest
-from aegismcp.transports.websocket import WebSocketTransport
+import websockets
+
 from aegismcp.protocol.codec import ProtocolCodec
 from aegismcp.protocol.messages import JSONRPCRequest
-import websockets
-import asyncio
+from aegismcp.transports.websocket import WebSocketTransport
+
 
 @pytest.mark.asyncio
 async def test_websocket_transport(monkeypatch):
@@ -15,7 +18,8 @@ async def test_websocket_transport(monkeypatch):
         async def recv(self):
             if not self.msgs:
                 await asyncio.sleep(0.01)
-                # Just raise a standard exception for testing instead of finding the exact websockets one
+                # Just raise a standard exception for testing
+                # instead of finding the exact websockets one
                 raise Exception("closed")
             return self.msgs.pop(0)
         async def send(self, msg):

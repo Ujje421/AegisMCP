@@ -53,7 +53,8 @@ class AegisClient:
             future = self._pending_requests.pop(message.id, None)
             if future and not future.done():
                 if message.error:
-                    future.set_exception(ProtocolError(f"RPC Error {message.error.code}: {message.error.message}"))
+                    msg = f"RPC Error {message.error.code}: {message.error.message}"
+                    future.set_exception(ProtocolError(msg))
                 else:
                     future.set_result(message.result)
         elif isinstance(message, JSONRPCNotification):

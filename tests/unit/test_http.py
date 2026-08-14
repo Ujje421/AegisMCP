@@ -1,8 +1,10 @@
+import httpx
 import pytest
-from aegismcp.transports.http import HttpSseTransport
+
 from aegismcp.protocol.codec import ProtocolCodec
 from aegismcp.protocol.messages import JSONRPCRequest
-import httpx
+from aegismcp.transports.http import HttpSseTransport
+
 
 @pytest.mark.asyncio
 async def test_http_transport(monkeypatch):
