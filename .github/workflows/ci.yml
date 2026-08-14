@@ -36,7 +36,7 @@ jobs:
         
     - name: Type check with mypy
       run: |
-        mypy --strict aegismcp
+        mypy --strict --explicit-package-bases aegismcp
         
     - name: Test with pytest
       run: |
