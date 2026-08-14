@@ -82,7 +82,7 @@ async def test_executor_deadline_exceeded():
         required_permissions=frozenset(), audit_level="NONE", fn=lambda: 1
     )
     
-    from datetime import datetime, timedelta, UTC
+    from datetime import UTC, datetime, timedelta
     now = datetime.now(UTC)
     # Deadline is in the past
     ctx = create_anonymous_context("r1", "t1", "s1", now - timedelta(seconds=10))
