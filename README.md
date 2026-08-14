@@ -6,14 +6,27 @@ If FastMCP is Flask, AegisMCP is Django. It provides a robust kernel, integrated
 
 ---
 
-## Why AegisMCP?
+## The Enterprise Standard
+
+Other MCP libraries are built for weekend prototypes—they give you a tool in 5 lines of code, but leave you completely exposed in production. 
+
+**AegisMCP is built for Fortune 500 deployments.** We don't bolt security on at the end. Aegis provides a deeply integrated, mathematically safe `ExecutionPipeline` that natively handles:
+- **Role-Based Access Control (RBAC)** to restrict sensitive tool usage.
+- **Rate Limiting** to prevent LLMs from running up your API bills.
+- **Deterministic Sagas** to automatically roll back multi-step AI tasks when failures occur.
+- **Multi-Agent Meshes** so intelligent agents can serve tools to other agents.
+
+If you are building a toy, use FastMCP. If you are deploying an AI Agent into a secure corporate network, use **AegisMCP**.
+
+---
+
+## Core Features
 
 - **Parallel Tool Execution:** Native `asyncio.gather` tool orchestrations vastly reduce latency during dense multi-tool generation.
 - **AegisContext Everywhere:** Explicit context propagation eliminates race conditions and ties every tool call to standard IDs (`request_id`, `trace_id`, `span_id`).
 - **Zero Mandatory Dependencies:** The core framework requires only `pydantic` and `anyio`. Run a basic stdio server in a 50MB container.
-- **First-Class Security:** Stop bolting on security. AegisMCP gives you fully customizable Auth, RBAC policy gating, Rate Limiting, and Audit Logging right out of the box.
+- **First-Class Security:** Customizable Auth, RBAC policy gating, Rate Limiting, and Audit Logging right out of the box.
 - **Built-In Agent Runtime:** Scale your AI via hierarchical sub-agents, deterministic Saga workflows, and multi-tool selection logic via the built-in Layer 5/6 engines.
-
 ## Installation
 
 ```bash
@@ -41,6 +54,44 @@ async def say_hello(name: str) -> str:
 
 if __name__ == "__main__":
     asyncio.run(app.run_stdio())
+```
+
+## Local Unit Testing
+
+Unlike other frameworks, AegisMCP enforces strict context propagation. When the `ExecutionPipeline` runs your tools over a network, it automatically injects a hardened `AegisContext`. 
+
+If you want to bypass the server and directly test your tools locally in Python, you simply construct the context yourself:
+
+```python
+import asyncio
+from datetime import datetime, timedelta, UTC
+from aegismcp.server.app import AegisMCP
+from aegismcp.kernel.context import AegisContext, Identity
+
+app = AegisMCP("TestServer")
+
+@app.tool()
+async def say_hello(ctx: AegisContext, name: str) -> str:
+    return f"Hello, {name}! AegisMCP is working perfectly!"
+
+async def main():
+    # Manually construct the security context for local testing
+    ctx = AegisContext(
+        request_id="test-req-001",
+        trace_id="trace-123",
+        span_id="span-123",
+        caller_identity=Identity(id="TestUser", type="user"),
+        permissions=frozenset(),
+        deadline=datetime.now(UTC) + timedelta(minutes=5),
+        metadata={},
+        baggage={}
+    )
+    
+    result = await say_hello(ctx, name="Ujjwal")
+    print(result)
+
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
 
 ## Enterprise Security (API Keys + RBAC)
