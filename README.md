@@ -154,3 +154,11 @@ class BookFlightStep:
 ```
 
 AegisMCP executes these sagas deterministically, ensuring your enterprise system always returns to a stable state.
+
+## Author
+
+**Ujjwal Jagtap** 
+* Email: [ujjwaljagtap7@gmail.com](mailto:ujjwaljagtap7@gmail.com)
+* GitHub: [Ujje421](https://github.com/Ujje421)
+
+Built with ❤️ for the AI integration community.

@@ -7,7 +7,7 @@ name = "aegismcp-ujje421"
 version = "0.1.2"
 description = "AegisMCP: The opinionated Model Context Protocol framework"
 authors = [
-    { name = "AegisMCP Team", email = "hello@aegismcp.dev" }
+    { name = "Ujjwal Jagtap", email = "ujjwaljagtap7@gmail.com" }
 ]
 readme = "README.md"
 license = { text = "MIT" }
