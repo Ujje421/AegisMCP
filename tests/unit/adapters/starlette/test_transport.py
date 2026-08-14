@@ -52,7 +52,15 @@ async def test_starlette_transport_logic():
     
     # Test that transport can send messages to the outbound queue
     from aegismcp.protocol.messages import JSONRPCRequest
-    rpc_req_model = JSONRPCRequest(**rpc_req)
+    rpc_req_model = JSONRPCRequest(
+        jsonrpc="2.0",
+        id=1,
+        method="tools/call",
+        params={
+            "name": "add",
+            "arguments": {"a": 5, "b": 10}
+        }
+    )
     await transport.send(rpc_req_model)
     outbound = transport.outbound_queue.get_nowait()
     assert json.loads(outbound)["method"] == "tools/call"

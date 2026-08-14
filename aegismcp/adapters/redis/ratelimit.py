@@ -79,14 +79,14 @@ class RedisRateLimiter:
 
         # Execute Lua script atomically
         try:
-            result = await self.redis.evalsha(
+            result = await self.redis.evalsha(  # type: ignore
                 sha, 1, bucket_key, self.tokens_per_minute, now
             )
         except NoScriptError:
             # Script was flushed from Redis, reload and try again
             self._script_sha = None
             sha = await self._load_script()
-            result = await self.redis.evalsha(
+            result = await self.redis.evalsha(  # type: ignore
                 sha, 1, bucket_key, self.tokens_per_minute, now
             )
 
