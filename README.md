@@ -92,4 +92,4 @@ async def onboarding_saga(ctx: AegisContext):
 ```
 
 ## Advanced Agent Runtimes
-For more advanced integrations (like RAG, Multi-Agent Mesh, or Semantic Tool Selection), view our [architecture decisions](/docs/ARCHITECTURE_DECISIONS.md) and full examples suite.
+For more advanced integrations (like RAG, Multi-Agent Mesh, or Semantic Tool Selection), view our [architecture decisions](docs/ARCHITECTURE_DECISIONS.md) and [full examples suite](examples/).

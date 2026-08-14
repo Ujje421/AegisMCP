@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "aegismcp"
+name = "aegismcp-ujje421"
 version = "0.1.0"
 description = "AegisMCP: The opinionated Model Context Protocol framework"
 authors = [
