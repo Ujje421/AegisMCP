@@ -64,12 +64,12 @@ async def test_agent_loop_success():
         ]
     )
 
-    client = AegisClient(ConnectionPool())
+    client = AegisClient(None)  # type: ignore
 
-    async def mock_request(*args, **kwargs):
+    async def mock_call_tool(*args: Any, **kwargs: Any) -> dict[str, str]:
         return {"content": "sunny"}
 
-    client.request = mock_request  # type: ignore
+    client.call_tool = mock_call_tool  # type: ignore
 
     agent = AegisAgent(model=provider, client=client, tool_registry=registry)
 
@@ -87,12 +87,12 @@ async def test_agent_max_turns():
         [ModelResponse("looping", [ToolCall("call1", "get_weather", {})]) for _ in range(10)]
     )
 
-    client = AegisClient(ConnectionPool())
+    client = AegisClient(None)  # type: ignore
 
-    async def mock_request(*args, **kwargs):
+    async def mock_call_tool(*args: Any, **kwargs: Any) -> dict[str, Any]:
         return {}
 
-    client.request = mock_request  # type: ignore
+    client.call_tool = mock_call_tool  # type: ignore
 
     agent = AegisAgent(model=provider, client=client, tool_registry={}, max_turns=3)
 
