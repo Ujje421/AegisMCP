@@ -9,4 +9,5 @@ class AuthStrategy(Protocol):
     Takes a raw transport message/request and returns an Identity if authenticated.
     Raises AuthenticationError if authentication fails.
     """
+
     async def authenticate(self, request: Any) -> Identity | None: ...

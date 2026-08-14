@@ -7,11 +7,13 @@ def test_generate_request_id():
     assert req1 != req2
     assert isinstance(req1, str)
 
+
 def test_generate_trace_id():
     t1 = generate_trace_id()
     t2 = generate_trace_id()
     assert t1 != t2
     assert len(t1) == 32
+
 
 def test_generate_span_id():
     s1 = generate_span_id()

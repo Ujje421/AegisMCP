@@ -10,20 +10,24 @@ class WorkflowError(AegisError):
     def __init__(self, message: str, request_id: str | None = None) -> None:
         super().__init__(message, request_id, is_retryable=False)
 
+
 class Step(Protocol):
     name: str
+
     async def execute(self, *args: Any, ctx: AegisContext, **kwargs: Any) -> Any: ...
     async def compensate(self, *args: Any, ctx: AegisContext, **kwargs: Any) -> None: ...
+
 
 @dataclass
 class WorkflowExecution:
     workflow_name: str
     completed_steps: list[tuple[Step, tuple[Any, ...], dict[str, Any]]]
 
+
 class WorkflowEngine:
     def __init__(self) -> None:
         self.workflows: dict[str, Callable[..., Awaitable[Any]]] = {}
-    
+
     def register(self, name: str, fn: Callable[..., Awaitable[Any]]) -> None:
         self.workflows[name] = fn
 
@@ -32,7 +36,7 @@ class WorkflowEngine:
     ) -> list[Any]:
         execution = WorkflowExecution(workflow_name="saga", completed_steps=[])
         results = []
-        
+
         try:
             for step, args, kwargs in steps:
                 res = await step.execute(*args, ctx=ctx, **kwargs)

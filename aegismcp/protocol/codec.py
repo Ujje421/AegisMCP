@@ -6,19 +6,20 @@ from .messages import JSONRPCNotification, JSONRPCRequest, JSONRPCResponse
 
 RawMessage = JSONRPCRequest | JSONRPCResponse | JSONRPCNotification
 
+
 class ProtocolCodec:
     def decode(self, data: str | bytes) -> RawMessage:
         try:
             parsed = json.loads(data)
         except json.JSONDecodeError as e:
             raise InvalidMessageError(f"Invalid JSON: {e}")
-            
+
         if not isinstance(parsed, dict):
             raise InvalidMessageError("JSON-RPC message must be an object")
-            
+
         if parsed.get("jsonrpc") != "2.0":
             raise InvalidMessageError("Invalid jsonrpc version")
-            
+
         if "id" in parsed:
             if "method" in parsed:
                 return JSONRPCRequest(**parsed)

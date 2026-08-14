@@ -13,6 +13,7 @@ class ToolSelector(Protocol):
         max_tools: int = 20,
     ) -> list[ToolDescriptor]: ...
 
+
 class AllToolsSelector(ToolSelector):
     async def select(
         self,

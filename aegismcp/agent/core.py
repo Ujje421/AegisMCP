@@ -15,10 +15,12 @@ class AgentError(AegisError):
     def __init__(self, message: str, request_id: str | None = None) -> None:
         super().__init__(message, request_id, is_retryable=False)
 
+
 @dataclass(frozen=True)
 class AgentResult:
     content: str
     turns: int
+
 
 class AegisAgent:
     def __init__(
@@ -29,7 +31,7 @@ class AegisAgent:
         selector: ToolSelector | None = None,
         memory: Memory | None = None,
         config: GenerationConfig | None = None,
-        max_turns: int = 10
+        max_turns: int = 10,
     ):
         self.model = model
         self.client = client
@@ -50,17 +52,19 @@ class AegisAgent:
             if not response.tool_calls:
                 return AgentResult(content=response.content, turns=turn + 1)
 
-            tool_results = await asyncio.gather(*[
-                self.client.request(
-                    method="tools/call",
-                    params={"name": tc.name, "arguments": tc.arguments},
-                    ctx=ctx
-                )
-                for tc in response.tool_calls
-            ])
+            tool_results = await asyncio.gather(
+                *[
+                    self.client.request(
+                        method="tools/call",
+                        params={"name": tc.name, "arguments": tc.arguments},
+                        ctx=ctx,
+                    )
+                    for tc in response.tool_calls
+                ]
+            )
 
             messages.append(response.as_assistant_message())
-            
+
             for tr, tc in zip(tool_results, response.tool_calls):
                 content = str(tr.get("content", tr)) if isinstance(tr, dict) else str(tr)
                 messages.append(Message.tool(f"Result for {tc.name}: {content}"))

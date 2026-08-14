@@ -17,11 +17,11 @@ class HttpSseTransport(Transport):
         self._running = False
         self._queue: asyncio.Queue[RawMessage] = asyncio.Queue()
         self._receive_task: asyncio.Task[None] | None = None
-        
+
     async def start(self) -> None:
         self._running = True
         self._receive_task = asyncio.create_task(self._listen_sse())
-        
+
     async def _listen_sse(self) -> None:
         try:
             async with self._client.stream("GET", self.sse_url) as response:
@@ -40,13 +40,13 @@ class HttpSseTransport(Transport):
         except Exception:
             if self._running:
                 self._running = False
-                
+
     async def stop(self) -> None:
         self._running = False
         if self._receive_task:
             self._receive_task.cancel()
         await self._client.aclose()
-        
+
     async def receive(self) -> AsyncIterator[RawMessage]:
         while self._running:
             try:
@@ -54,13 +54,11 @@ class HttpSseTransport(Transport):
                 yield msg
             except TimeoutError:
                 continue
-                
+
     async def send(self, message: RawMessage) -> None:
         encoded = self._codec.encode(message)
         response = await self._client.post(
-            self.post_url, 
-            content=encoded, 
-            headers={"Content-Type": "application/json"}
+            self.post_url, content=encoded, headers={"Content-Type": "application/json"}
         )
         if response.status_code >= 400:
             raise ConnectionError(f"HTTP Error {response.status_code}: {response.text}")

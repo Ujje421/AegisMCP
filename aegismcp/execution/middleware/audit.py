@@ -13,16 +13,12 @@ from aegismcp.tools.descriptor import ToolDescriptor
 class AuditMiddleware:
     def __init__(self, sink: AuditSink):
         self.sink = sink
-        
+
     async def __call__(
-        self, 
-        inputs: Any, 
-        ctx: AegisContext, 
-        descriptor: ToolDescriptor, 
-        next_handler: ToolHandler
+        self, inputs: Any, ctx: AegisContext, descriptor: ToolDescriptor, next_handler: ToolHandler
     ) -> Any:
         start_time = time.time()
-        
+
         inputs_hash = None
         if inputs:
             try:
@@ -30,7 +26,7 @@ class AuditMiddleware:
                 inputs_hash = hashlib.sha256(inputs_str.encode()).hexdigest()
             except Exception:
                 inputs_hash = "unhashable"
-                
+
         outcome = "success"
         try:
             result = await next_handler(inputs, ctx, descriptor)
@@ -40,7 +36,7 @@ class AuditMiddleware:
             raise
         finally:
             duration = (time.time() - start_time) * 1000
-            
+
             record = AuditRecord(
                 request_id=ctx.request_id,
                 timestamp=start_time,
@@ -50,7 +46,7 @@ class AuditMiddleware:
                 decision=PolicyDecision.ALLOW,
                 inputs_hash=inputs_hash,
                 outcome=outcome,
-                duration_ms=duration
+                duration_ms=duration,
             )
-            
+
             await self.sink.record(record)

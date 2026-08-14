@@ -9,6 +9,7 @@ class PolicyDecision(Enum):
     DENY = "DENY"
     DENY_WITH_REASON = "DENY_WITH_REASON"
 
+
 class PolicyEngine(Protocol):
     async def evaluate(
         self,
