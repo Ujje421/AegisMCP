@@ -2,7 +2,7 @@
 
 AegisMCP is an opinionated, high-performance **Model Context Protocol (MCP)** framework designed for enterprise scale. 
 
-If FastMCP is Flask, AegisMCP is Django. It provides a robust kernel, integrated zero-dependency abstractions, and high-performance asynchronous orchestration to scale your multi-agent architecture.
+If other minimal frameworks are like Flask, AegisMCP is like Django. It provides a robust kernel, integrated zero-dependency abstractions, and high-performance asynchronous orchestration to scale your multi-agent architecture.
 
 ---
 
@@ -16,7 +16,7 @@ Other MCP libraries are built for weekend prototypes—they give you a tool in 5
 - **Deterministic Sagas** to automatically roll back multi-step AI tasks when failures occur.
 - **Multi-Agent Meshes** so intelligent agents can serve tools to other agents.
 
-If you are building a toy, use FastMCP. If you are deploying an AI Agent into a secure corporate network, use **AegisMCP**.
+If you are building a weekend toy, use a minimal lightweight framework. If you are deploying an AI Agent into a secure corporate network, use **AegisMCP**.
 
 ---
 
