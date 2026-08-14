@@ -45,7 +45,7 @@ class AegisMCP:
     def tool(self, **kwargs: Any) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         """Register a tool. Delegates to the @tool decorator."""
         def decorator(fn: Callable[..., Any]) -> Callable[..., Any]:
-            decorated_fn = tool(**kwargs)(fn)
+            decorated_fn: Callable[..., Any] = tool(**kwargs)(fn)
             descriptor = getattr(decorated_fn, "__aegis_tool__")
             self.tools[descriptor.name] = descriptor
             return decorated_fn
