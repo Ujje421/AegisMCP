@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aegismcp-ujje421"
-version = "0.1.1"
+version = "0.1.2"
 description = "AegisMCP: The opinionated Model Context Protocol framework"
 authors = [
     { name = "AegisMCP Team", email = "hello@aegismcp.dev" }
@@ -33,7 +33,7 @@ jwt        = ["python-jose[cryptography]>=3.3"]
 redis      = ["redis>=5.0"]
 pgvector   = ["asyncpg>=0.29", "pgvector>=0.2"]
 agents     = ["anthropic>=0.25", "openai>=1.30", "tiktoken>=0.7"]
-all        = ["aegismcp[http,observability,jwt,redis,agents]"]
+all        = ["aegismcp-ujje421[http,observability,jwt,redis,agents]"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["aegismcp"]
