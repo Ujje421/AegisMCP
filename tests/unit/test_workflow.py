@@ -45,7 +45,8 @@ async def test_workflow_saga_success():
     step1 = MockStep("step1")
     step2 = MockStep("step2")
     
-    steps = [
+    from typing import Any
+    steps: list[tuple[Step, tuple[Any, ...], dict[str, Any]]] = [
         (step1, (), {}),
         (step2, (), {})
     ]
@@ -67,7 +68,7 @@ async def test_workflow_saga_compensation():
     step2 = MockStep("step2", should_fail=True)
     step3 = MockStep("step3")
     
-    steps = [
+    steps: list[tuple[Step, tuple[Any, ...], dict[str, Any]]] = [
         (step1, (), {}),
         (step2, (), {}),
         (step3, (), {})
