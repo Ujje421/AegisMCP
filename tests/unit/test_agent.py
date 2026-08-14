@@ -35,7 +35,13 @@ class MockModelProvider(ModelProvider):
         self.call_count += 1
         return resp
 
-    async def stream(self, *args, **kwargs) -> AsyncIterator[ModelResponseChunk]:
+    async def stream(
+        self,
+        messages: list[Message],
+        tools: list[ToolDescriptor],
+        config: GenerationConfig,
+        ctx: AegisContext,
+    ) -> AsyncIterator[ModelResponseChunk]:
         yield ModelResponseChunk("")
 
 
