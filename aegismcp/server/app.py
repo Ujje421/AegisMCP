@@ -27,6 +27,9 @@ class AegisMCP:
         self.description = description
         self.tools: dict[str, ToolDescriptor] = {}
         
+        from aegismcp.workflow.engine import WorkflowEngine
+        self.workflow_engine = WorkflowEngine()
+        
         self.middlewares = []
         if telemetry_metrics and telemetry_tracer:
             from aegismcp.execution.middleware.observability import ObservabilityMiddleware
@@ -54,6 +57,13 @@ class AegisMCP:
             descriptor = getattr(decorated_fn, "__aegis_tool__")
             self.tools[descriptor.name] = descriptor
             return decorated_fn
+        return decorator
+        
+    def workflow(self, name: str | None = None) -> Any:
+        def decorator(fn: Any) -> Any:
+            wf_name = name or fn.__name__
+            self.workflow_engine.register(wf_name, fn)
+            return fn
         return decorator
         
     async def run_stdio(self) -> None:
