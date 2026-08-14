@@ -85,7 +85,7 @@ class AegisMCP:
         await self.run_transport(transport)
 
     async def run_transport(self, transport: Transport) -> None:
-        from aegismcp.protocol.messages import JSONRPCResponse, JSONRPCRequest
+        from aegismcp.protocol.messages import JSONRPCRequest, JSONRPCResponse
 
         await transport.start()
         try:

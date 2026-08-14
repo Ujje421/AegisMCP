@@ -1,22 +1,17 @@
-import asyncio
 import json
 
 import pytest
-from httpx import AsyncClient, ASGITransport
 from starlette.testclient import TestClient
-
-from aegismcp.adapters.starlette.transport import create_starlette_app
-from aegismcp.server.app import AegisMCP
 
 
 @pytest.mark.asyncio
 async def test_starlette_transport_logic():
-    from aegismcp.adapters.starlette.transport import ServerSseTransport
-    from starlette.testclient import TestClient
-    from starlette.routing import Route
     from starlette.applications import Starlette
     from starlette.requests import Request
-    from starlette.responses import Response, StreamingResponse
+    from starlette.responses import Response
+    from starlette.routing import Route
+
+    from aegismcp.adapters.starlette.transport import ServerSseTransport
 
     transport = ServerSseTransport()
 
@@ -45,7 +40,6 @@ async def test_starlette_transport_logic():
     assert resp.status_code == 202
 
     # Verify the message went into the transport queue
-    import json
 
     raw_msg = transport._queue.get_nowait()
     assert json.loads(raw_msg)["method"] == "tools/call"

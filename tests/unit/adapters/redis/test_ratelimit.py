@@ -1,10 +1,7 @@
-import asyncio
-import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import pytest
-import redis.asyncio as redis
 from redis.exceptions import NoScriptError
 
 from aegismcp.adapters.redis.ratelimit import RateLimitError, RedisRateLimiter
@@ -69,7 +66,7 @@ def context():
         span_id="span-123",
         caller_identity=Identity(id="user_1", type="user"),
         permissions=frozenset(),
-        deadline=datetime.now(timezone.utc),
+        deadline=datetime.now(UTC),
         metadata={},
         baggage={},
     )

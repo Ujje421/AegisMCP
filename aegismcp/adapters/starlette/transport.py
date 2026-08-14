@@ -1,6 +1,7 @@
 import asyncio
-from typing import Any
 from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from typing import Any
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -56,9 +57,6 @@ class ServerSseTransport(Transport):
         await self._queue.put(raw_data)
 
 
-from contextlib import asynccontextmanager
-
-
 def create_starlette_app(aegis_app: AegisMCP) -> Starlette:
     """
     Creates a Starlette ASGI application that mounts the given AegisMCP instance.
@@ -75,7 +73,7 @@ def create_starlette_app(aegis_app: AegisMCP) -> Starlette:
         async def event_generator() -> AsyncGenerator[bytes, None]:
             while True:
                 msg = await transport.outbound_queue.get()
-                yield f"data: {msg}\n\n".encode("utf-8")
+                yield f"data: {msg}\n\n".encode()
 
         return EventSourceResponse(event_generator())
 
