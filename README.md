@@ -22,7 +22,7 @@ pip install aegismcp-core
 
 Or install with all optional extensions (HTTP transports, observability SDKs, vector database adapters):
 ```bash
-pip install aegismcp[all]
+pip install "aegismcp-core[all]"
 ```
 
 ## Quick Start (Stdio)
