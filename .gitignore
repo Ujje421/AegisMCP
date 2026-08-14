@@ -39,3 +39,4 @@ venv.bak/
 *.md
 *.png
 !README.md
+!docs/*.md
