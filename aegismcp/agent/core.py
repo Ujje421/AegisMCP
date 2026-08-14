@@ -54,10 +54,9 @@ class AegisAgent:
 
             tool_results = await asyncio.gather(
                 *[
-                    self.client.request(
-                        method="tools/call",
-                        params={"name": tc.name, "arguments": tc.arguments},
-                        ctx=ctx,
+                    self.client.call_tool(
+                        name=tc.name,
+                        arguments=tc.arguments,
                     )
                     for tc in response.tool_calls
                 ]

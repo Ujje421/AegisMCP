@@ -5,7 +5,7 @@ from typing import Any, get_type_hints
 from pydantic import TypeAdapter
 
 
-def generate_json_schema(fn: Callable) -> dict[str, Any]:
+def generate_json_schema(fn: Callable[..., Any]) -> dict[str, Any]:
     """Generate a JSON schema from a function's type hints."""
     sig = inspect.signature(fn)
     hints = get_type_hints(fn, include_extras=True)

@@ -4,6 +4,8 @@ from .descriptor import ToolDescriptor
 from .schema import generate_json_schema
 
 
+from typing import Any
+
 def tool(
     name: str | None = None,
     description: str | None = None,
@@ -11,14 +13,14 @@ def tool(
     max_retries: int = 0,
     retry_delay: float = 1.0,
     is_idempotent: bool = False,
-    permissions: frozenset = frozenset(),
+    permissions: frozenset[str] = frozenset(),
     audit: str = "METADATA",
     cache_ttl: int | None = None,
     tags: list[str] | None = None,
-) -> Callable:
+) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
     """Decorator to register a function as an MCP tool."""
 
-    def decorator(fn: Callable) -> Callable:
+    def decorator(fn: Callable[..., Any]) -> Callable[..., Any]:
         fn_name = name or fn.__name__
         fn_desc = description or fn.__doc__ or ""
 

@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Any
 
 from aegismcp.kernel.types import PermissionSet
 
@@ -8,12 +9,12 @@ from aegismcp.kernel.types import PermissionSet
 class ToolDescriptor:
     name: str
     description: str
-    input_schema: dict
-    output_schema: dict | None
+    input_schema: dict[str, Any]
+    output_schema: dict[str, Any] | None
     timeout_seconds: float
     max_retries: int
     retry_delay_seconds: float
     is_idempotent: bool
     required_permissions: PermissionSet
     audit_level: str
-    fn: Callable
+    fn: Callable[..., Any]

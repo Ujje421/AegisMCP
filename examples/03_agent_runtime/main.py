@@ -79,10 +79,10 @@ async def main() -> None:
     # 2. Setup Dummy Client (In real life, connect to WebSocketTransport)
     client = AegisClient(MockTransport())
 
-    async def mock_request(*args, **kwargs):
+    async def mock_call_tool(*args: Any, **kwargs: Any) -> dict[str, str]:
         return {"content": "Sunny"}
 
-    client.request = mock_request  # type: ignore
+    client.call_tool = mock_call_tool  # type: ignore
 
     # 3. Setup Agent
     agent = AegisAgent(model=DummyModelProvider(), client=client, tool_registry=registry)

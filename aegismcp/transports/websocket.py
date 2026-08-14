@@ -13,12 +13,12 @@ class WebSocketTransport(Transport):
         self.url = url
         self._codec = codec
         # type ignore because websockets typing can be complex
-        self._connection: Any | None = None  # type: ignore
+        self._connection: Any | None = None
         self._running = False
 
     async def start(self) -> None:
         try:
-            self._connection = await websockets.connect(self.url)  # type: ignore
+            self._connection = await websockets.connect(self.url)
             self._running = True
         except Exception as e:
             raise ConnectionError(f"Failed to connect to WebSocket: {e}")
@@ -26,7 +26,7 @@ class WebSocketTransport(Transport):
     async def stop(self) -> None:
         self._running = False
         if self._connection:
-            await self._connection.close()  # type: ignore
+            await self._connection.close()
 
     async def receive(self) -> AsyncIterator[RawMessage]:
         if not self._connection:
@@ -34,7 +34,7 @@ class WebSocketTransport(Transport):
 
         while self._running:
             try:
-                message = await self._connection.recv()  # type: ignore
+                message = await self._connection.recv()
                 yield self._codec.decode(message)
             except Exception:
                 self._running = False
@@ -45,4 +45,4 @@ class WebSocketTransport(Transport):
             raise ConnectionError("WebSocket not connected")
 
         encoded = self._codec.encode(message)
-        await self._connection.send(encoded)  # type: ignore
+        await self._connection.send(encoded)
