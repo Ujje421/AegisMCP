@@ -883,10 +883,10 @@
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    T--&gt;&gt;C: Response
 </span></code></pre></div>
 <h3 id="1-transport-layer">1. Transport Layer</h3>
-<p>Transports like <code>StdioTransport</code> handles the raw IO streams. It decodes bytes into JSON-RPC models and routes them to the pipeline.</p>
+<p>Transports like <code>StdioTransport</code> or the <code>ServerSseTransport</code> (via the Starlette adapter) handle the raw IO streams. They decode bytes into JSON-RPC models and route them to the pipeline.</p>
 <h3 id="2-middleware-pipeline">2. Middleware Pipeline</h3>
 <p>Before a tool is executed, it must pass through the middlewares. Middlewares intercept the request sequentially:
-- They can <strong>Reject</strong> the request immediately (e.g., HTTP 429 Too Many Requests, or 403 Forbidden).
+- They can <strong>Reject</strong> the request immediately (e.g., HTTP 429 Too Many Requests via <code>RedisRateLimiter</code>, or 403 Forbidden).
 - They can <strong>Mutate</strong> the context (e.g., AuthMiddleware attaches the <code>Identity</code> object).</p>
 <h3 id="3-aegiscontext">3. AegisContext</h3>
 <p>The context is a frozen, explicitly propagated dataclass. It contains:

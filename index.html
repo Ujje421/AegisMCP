@@ -860,6 +860,7 @@
 <li><strong>Parallel Tool Execution:</strong> Native <code>asyncio.gather</code> tool orchestrations vastly reduce latency during dense multi-tool generation.</li>
 <li><strong>AegisContext Everywhere:</strong> Explicit context propagation eliminates race conditions and ties every tool call to standard IDs (<code>request_id</code>, <code>trace_id</code>, <code>span_id</code>).</li>
 <li><strong>Zero Mandatory Dependencies:</strong> The core framework requires only <code>pydantic</code> and <code>anyio</code>. Run a basic stdio server in a 50MB container.</li>
+<li><strong>Pluggable Adapters:</strong> Mount AegisMCP inside a FastAPI backend using the <code>Starlette Adapter</code>, or deploy to a cluster with the <code>RedisRateLimiter</code>.</li>
 <li><strong>First-Class Security:</strong> Customizable Auth, RBAC policy gating, Rate Limiting, and Audit Logging right out of the box.</li>
 <li><strong>Built-In Agent Runtime:</strong> Scale your AI via hierarchical sub-agents, deterministic Saga workflows, and multi-tool selection logic via the built-in Layer 5/6 engines.</li>
 </ul>
