@@ -40,7 +40,7 @@ Or install with all optional extensions (HTTP transports, observability SDKs, ve
 pip install "aegismcp-core[all]"
 ```
 
-## Quick Start (Stdio)
+## Quick Start (Stdio & HTTP)
 
 The simplest AegisMCP application runs entirely over Stdio.
 
@@ -56,6 +56,20 @@ async def say_hello(name: str) -> str:
 
 if __name__ == "__main__":
     asyncio.run(app.run_stdio())
+```
+
+AegisMCP is not limited to Stdio. You can instantly expose it via HTTP Server-Sent Events (SSE) by wrapping it in an ASGI application using our robust **Starlette Adapter**:
+
+```python
+import uvicorn
+from aegismcp.server.app import AegisMCP
+from aegismcp.adapters.starlette.transport import create_starlette_app
+
+app = AegisMCP("HttpServer")
+asgi_app = create_starlette_app(app)
+
+if __name__ == "__main__":
+    uvicorn.run(asgi_app, host="0.0.0.0", port=8000)
 ```
 
 ## Local Unit Testing
@@ -180,9 +194,9 @@ The pipeline verifies the identity attached to the `AegisContext`.
 
 AegisMCP provides built-in `ApiKeyMiddleware`. It extracts tokens from headers (in HTTP transports) or connection payloads (in WebSockets).
 
-#### Rate Limiting
+#### Distributed Rate Limiting
 
-The `RateLimitMiddleware` ensures that a single identity cannot spam the RPC server, preventing DOS attacks.
+The `RateLimitMiddleware` ensures that a single identity cannot spam the RPC server, preventing DOS attacks. For production enterprise deployments, AegisMCP includes a distributed `RedisRateLimiter` powered by an atomic token-bucket Lua script.
 
 ### Workflows & Deterministic Sagas
 
