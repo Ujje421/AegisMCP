@@ -1,0 +1,71 @@
+site_name: AegisMCP
+site_description: The opinionated Model Context Protocol framework designed for enterprise scale.
+site_url: https://Ujje421.github.io/AegisMCP/
+repo_url: https://github.com/Ujje421/AegisMCP
+repo_name: Ujje421/AegisMCP
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.expand
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_source: true
+            show_signature_annotations: true
+
+nav:
+  - Home: index.md
+  - Basics:
+      - Getting Started: getting-started.md
+      - Local Testing: local-testing.md
+  - Advanced:
+      - Architecture: architecture.md
+      - Enterprise Security: security.md
+      - Workflows & Sagas: workflows.md
+  - Reference:
+      - API Reference: api-reference.md
