@@ -14,7 +14,6 @@ from aegismcp.agent.models import (
     ToolCall,
 )
 from aegismcp.client.core import AegisClient
-from aegismcp.client.pool import ConnectionPool
 from aegismcp.kernel.context import AegisContext, create_anonymous_context
 from aegismcp.tools.descriptor import ToolDescriptor
 
