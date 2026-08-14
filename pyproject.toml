@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aegismcp-ujje421"
-version = "0.1.0"
+version = "0.1.1"
 description = "AegisMCP: The opinionated Model Context Protocol framework"
 authors = [
     { name = "AegisMCP Team", email = "hello@aegismcp.dev" }

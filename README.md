@@ -92,4 +92,65 @@ async def onboarding_saga(ctx: AegisContext):
 ```
 
 ## Advanced Agent Runtimes
-For more advanced integrations (like RAG, Multi-Agent Mesh, or Semantic Tool Selection), view our [architecture decisions](docs/ARCHITECTURE_DECISIONS.md) and [full examples suite](examples/).
+
+### Multi-Agent Mesh & Runtime
+
+AegisMCP extends the Model Context Protocol far beyond simple remote procedure calls.
+
+#### AegisAgent
+
+The `AegisAgent` class acts as the brains of your system. You provide it a `ModelProvider` (like Anthropic or OpenAI) and a list of tool names. It autonomously iterates through an execution loop, deciding which tools to call.
+
+#### The agent_as_tool Pattern
+
+In a true Enterprise Multi-Agent Mesh, agents need to talk to other agents. AegisMCP allows you to instantly convert an entire `AegisAgent` into a standard MCP tool using the `agent_as_tool` adapter.
+
+This allows a top-level Router Agent to call a "Database Analyst Agent" simply by executing a tool call, seamlessly passing contexts down the tree.
+
+### Security Model
+
+AegisMCP treats security as a first-class citizen using the `ExecutionPipeline` and `Middleware` architecture.
+
+#### Role-Based Access Control (RBAC)
+
+When defining a tool, you can specify `required_permissions`:
+
+```python
+@app.tool(required_permissions={"admin:write"})
+async def delete_user(user_id: str):
+    pass
+```
+
+The pipeline verifies the identity attached to the `AegisContext`.
+
+#### API Key Authentication
+
+AegisMCP provides built-in `ApiKeyMiddleware`. It extracts tokens from headers (in HTTP transports) or connection payloads (in WebSockets).
+
+#### Rate Limiting
+
+The `RateLimitMiddleware` ensures that a single identity cannot spam the RPC server, preventing DOS attacks.
+
+### Workflows & Deterministic Sagas
+
+AegisMCP uses the `WorkflowEngine` to implement the **Saga Pattern**.
+
+#### Why Sagas?
+
+In a multi-agent or multi-tool system, tasks often require multiple sequential steps (e.g., Book Flight, Reserve Hotel, Charge Credit Card). 
+
+If "Charge Credit Card" fails, you can't simply throw an error—you must roll back the hotel and flight!
+
+#### Implementation
+
+```python
+class BookFlightStep:
+    async def execute(self, ctx: AegisContext):
+        return await flight_api.book()
+        
+    async def compensate(self, ctx: AegisContext):
+        # Triggered automatically if ANY subsequent step fails!
+        await flight_api.cancel()
+```
+
+AegisMCP executes these sagas deterministically, ensuring your enterprise system always returns to a stable state.
