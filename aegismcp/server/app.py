@@ -18,7 +18,9 @@ class AegisMCP:
         auth: Any = None,
         policy: Any = None,
         audit: Any = None,
-        rate_limit: int | None = None
+        rate_limit: int | None = None,
+        telemetry_metrics: Any = None,
+        telemetry_tracer: Any = None
     ):
         self.name = name
         self.version = version
@@ -26,6 +28,9 @@ class AegisMCP:
         self.tools: dict[str, ToolDescriptor] = {}
         
         self.middlewares = []
+        if telemetry_metrics and telemetry_tracer:
+            from aegismcp.execution.middleware.observability import ObservabilityMiddleware
+            self.middlewares.append(ObservabilityMiddleware(telemetry_metrics, telemetry_tracer))
         if rate_limit is not None:
             from aegismcp.execution.middleware.ratelimit import RateLimitMiddleware
             self.middlewares.append(RateLimitMiddleware(rate_limit))
